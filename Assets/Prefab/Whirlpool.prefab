@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1439215589142314631
+--- !u!1 &4182686009858871585
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,40 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7879433181940563128}
-  - component: {fileID: 4263704684326049078}
-  - component: {fileID: 2839377754748456110}
-  - component: {fileID: 5829434220497433926}
+  - component: {fileID: 6875954662991506755}
+  - component: {fileID: 1059567555689915581}
+  - component: {fileID: 4710432613598648924}
+  - component: {fileID: 7158067530581084261}
   m_Layer: 0
-  m_Name: Obstacle
+  m_Name: Whirlpool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7879433181940563128
+--- !u!4 &6875954662991506755
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1439215589142314631}
+  m_GameObject: {fileID: 4182686009858871585}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.52, y: 4.54, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 8.04, y: -0.06, z: 0}
+  m_LocalScale: {x: 4, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &4263704684326049078
+--- !u!212 &1059567555689915581
 SpriteRenderer:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1439215589142314631}
+  m_GameObject: {fileID: 4182686009858871585}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -83,8 +83,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.8377358, g: 0.11380567, b: 0.11380567, a: 1}
+  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Color: {r: 0.79622644, g: 0.03305097, b: 0.5933875, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -93,13 +93,13 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!61 &2839377754748456110
-BoxCollider2D:
+--- !u!58 &4710432613598648924
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1439215589142314631}
+  m_GameObject: {fileID: 4182686009858871585}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -123,34 +123,40 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
---- !u!114 &5829434220497433926
+  m_Radius: 0.5
+--- !u!114 &7158067530581084261
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1439215589142314631}
+  m_GameObject: {fileID: 4182686009858871585}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94926989e57d21d42bb087a5013f27cd, type: 3}
+  m_Script: {fileID: 11500000, guid: f135743cac7f2f14caba57b8b3322c2b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BreakableObstacle
-  requiredImpactSpeed: 5
-  breakEffect: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::Whirlpool
+  pullStrength: 50
+  maxPullDistance: 5
+  escapeForce: 30
+  escapeSpeedThreshold: 15
+  centerLockRadius: 0.5
   playerTag: Boat
+  trappedRotationSpeed: 360
+  mashGainPerPress: 0.2
+  mashDecayPerSecond: 0.4
+  mashRequired: 1
+  maxTrappedTime: 3
+  shrinkSpeed: 1.5
+  minScaleWhileAlive: 0.15
+  deathScale: 0.01
+  scaleRestoreSpeed: 4
+  playerDie: {fileID: 0}
+  mashProgress: 0
+  escape: 0
+  startDirection: {x: 0, y: 0}

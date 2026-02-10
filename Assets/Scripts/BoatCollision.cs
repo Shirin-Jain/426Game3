@@ -1,5 +1,6 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 
 public class BoatCollision : MonoBehaviour
@@ -23,6 +24,8 @@ public class BoatCollision : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
 
+    public GameObject deathScreen;
+
     public bool actuallyDie = false;
 
 
@@ -31,6 +34,7 @@ public class BoatCollision : MonoBehaviour
         playerCollider = GetComponent<Collider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         originalColor = spriteRenderer.color;
+        deathScreen.SetActive(false);
 
 
     }
@@ -79,6 +83,8 @@ public class BoatCollision : MonoBehaviour
         if (actuallyDie)
         {
             Destroy(gameObject);
+            deathScreen.SetActive(true);
+
             // game over screen
 
         }

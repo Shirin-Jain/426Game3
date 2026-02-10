@@ -1,3 +1,4 @@
+using Unity.Multiplayer.PlayMode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -23,6 +24,16 @@ public class Whirlpool : MonoBehaviour
     public float maxTrappedTime = 3f;
     private float trappedTimer = 0f;
 
+
+
+    public float shrinkSpeed = 1.5f;
+    public float minScaleWhileAlive = 0.01f;
+    public float deathScale = 0.01f;
+    public float scaleRestoreSpeed = 4f;
+
+    private Vector3 originalScale;
+
+
     public BoatCollision playerDie;
 
 
@@ -34,10 +45,54 @@ public class Whirlpool : MonoBehaviour
 
     public Vector2 startDirection = Vector2.zero;
 
+    private float originalRotation;
+    private bool isRestoringRotation;
+
+    private Transform currentPlayer;
+    private bool isRestoringScale = false;
+
     private void Start()
     {
-        ResetTrapState();
+        
+    }
 
+    private void Update()
+    {
+        // Smoothly restore scale after escape
+        if (isRestoringScale && currentPlayer != null)
+        {
+            currentPlayer.localScale = Vector3.Lerp(
+                currentPlayer.localScale,
+                originalScale,
+                scaleRestoreSpeed * Time.deltaTime
+            );
+
+            if (Vector3.Distance(currentPlayer.localScale, originalScale) < 0.01f)
+            {
+                currentPlayer.localScale = originalScale;
+                isRestoringScale = false;
+            }
+        }
+
+        if(isRestoringRotation && currentPlayer != null)
+    {
+            float current = currentPlayer.eulerAngles.z;
+            float target = originalRotation;
+
+            float newRotation = Mathf.LerpAngle(
+                current,
+                target,
+                scaleRestoreSpeed * Time.deltaTime
+            );
+
+            currentPlayer.rotation = Quaternion.Euler(0f, 0f, newRotation);
+
+            if (Mathf.Abs(Mathf.DeltaAngle(newRotation, target)) < 0.5f)
+            {
+                currentPlayer.rotation = Quaternion.Euler(0f, 0f, target);
+                isRestoringRotation = false;
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -46,6 +101,10 @@ public class Whirlpool : MonoBehaviour
             return;
 
         startDirection = collision.transform.position;
+        originalScale = collision.transform.localScale;
+        currentPlayer = collision.transform;
+        originalRotation = collision.transform.eulerAngles.z;
+
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -75,10 +134,14 @@ public class Whirlpool : MonoBehaviour
         if (distance <= centerLockRadius)
         {
             escape = false;
+            isRestoringRotation = false;
+            isRestoringScale = false;
 
            TrapPlayer(rb);
            HandleButtonMash(rb);
            HandleDeathTimer(collision);
+           ShrinkPlayer(collision.transform);
+
 
 
 
@@ -90,7 +153,11 @@ public class Whirlpool : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        ResetTrapState();
+
+        //startDirection = Vector2.zero;
+        //originalScale = collision.transform.localScale;
+
+
     }
 
     private void TrapPlayer(Rigidbody2D rb)
@@ -120,9 +187,22 @@ public class Whirlpool : MonoBehaviour
             //Vector2 escapeDirection = (rb.position - (Vector2)transform.position).normalized; // get old direction
             Vector2 escapeDirection = new Vector2(1, 0);
             rb.AddForce(escapeDirection * escapeForce, ForceMode2D.Impulse);
+            isRestoringScale = true;
+            isRestoringRotation = true;
 
-            mashProgress = 0f;
+            ResetTrapState(rb.transform);
         }
+    }
+
+    private void ShrinkPlayer(Transform player)
+    {
+        Vector3 targetScale = originalScale * minScaleWhileAlive;
+
+        player.localScale = Vector3.MoveTowards(
+            player.localScale,
+            targetScale,
+            shrinkSpeed * Time.fixedDeltaTime
+        );
     }
 
     private void HandleDeathTimer(Collider2D player)
@@ -146,14 +226,20 @@ public class Whirlpool : MonoBehaviour
     private void KillPlayer(Collider2D player)
     {
         // cal player die
-        Debug.Log("Die");
+        //Debug.Log("Die");
+        player.transform.localScale = Vector3.one * deathScale;
+
+        playerDie.TryDie();
     }
 
 
-    private void ResetTrapState()
+    private void ResetTrapState(Transform player)
     {
         mashProgress = 0f;
         trappedTimer = 0f;
-        startDirection = Vector2.zero;
+        if (player != null)
+            player.localScale = originalScale;
     }
+
+   
 }

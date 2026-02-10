@@ -23,6 +23,8 @@ public class BoatCollision : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
 
+    public bool actuallyDie = false;
+
 
     void Start()
     {
@@ -63,7 +65,7 @@ public class BoatCollision : MonoBehaviour
         }
     }
 
-    void TryDie()
+    public void TryDie()
     {
         if (isInvulnerable)
             return;
@@ -73,7 +75,17 @@ public class BoatCollision : MonoBehaviour
 
     void Die()
     {
-        Destroy(gameObject);
+
+        if (actuallyDie)
+        {
+            Destroy(gameObject);
+            // game over screen
+
+        }
+        else
+        {
+            Debug.Log("Die");
+        }
     }
 
     IEnumerator InvulnerabilityCoroutine()

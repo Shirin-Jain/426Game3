@@ -1,84 +1,58 @@
-//using UnityEngine;
-
-//public class Whirlpool : MonoBehaviour
-//{
-//    [Header("Whirlpool Settings")]
-//    public float pullStrength = 20f;
-//    public float requiredEntrySpeed = 6f;
-//    public float maxPullDistance = 5f;
-
-//    private void OnTriggerEnter2D(Collider2D other)
-//    {
-//        if (!other.CompareTag("Player"))
-//            return;
-
-//        Rigidbody2D rb = other.GetComponent<Rigidbody2D>();
-//        if (rb == null)
-//            return;
-
-//        float entrySpeed = rb.linearVelocity.magnitude;
-
-//        // Player is too slow → trapped
-//        if (entrySpeed < requiredEntrySpeed)
-//        {
-//            PlayerWhirlpoolState state = other.GetComponent<PlayerWhirlpoolState>();
-//            if (state != null)
-//            {
-//                state.EnterWhirlpool(transform, pullStrength, maxPullDistance);
-//            }
-//        }
-//    }
-
-//    private void OnTriggerExit2D(Collider2D other)
-//    {
-//        if (!other.CompareTag("Player"))
-//            return;
-
-//        PlayerWhirlpoolState state = other.GetComponent<PlayerWhirlpoolState>();
-//        if (state != null)
-//        {
-//            state.ExitWhirlpool();
-//        }
-//    }
-//}
-
-
-
 using UnityEngine;
 
 public class Whirlpool : MonoBehaviour
 {
-    public float pullStrength = 10f;
-    public string playerTag = "Boat";
-    public float maxHorizontalForce = 2;
+    public float pullStrength = 20f;
+    public float maxPullDistance = 5f;
 
-    //[Header("Spin Settings")]
-    //public float spinStrength = 200f;
+    public float escapeSpeedThreshold = 6f;
+    public float centerLockRadius = 0.3f;
+
+    public string playerTag = "Boat";
+
+    public float trappedRotationSpeed = 360f; // degrees per second
+
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (!other.CompareTag(playerTag)) return;
+        if (!other.CompareTag(playerTag))
+            return;
 
         Rigidbody2D rb = other.attachedRigidbody;
-        if (rb == null) return;
+        if (rb == null)
+            return;
 
         Vector2 directionToCenter = (Vector2)transform.position - rb.position;
-
-        if(directionToCenter.x > maxHorizontalForce)
-        {
-            directionToCenter.x = maxHorizontalForce;
-        }
         float distance = directionToCenter.magnitude;
 
-        // Pull toward center
-        Vector2 pullForce = directionToCenter.normalized * pullStrength;
-        rb.AddForce(pullForce);
+        float playerSpeed = rb.linearVelocity.magnitude;
 
-        // Optional: clamp max speed so it doesn't go crazy
-        //rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxPullSpeed);
+        // If player is fast enough, they can fight the pull
+        if (playerSpeed >= escapeSpeedThreshold)
+        {
+            ApplyPull(rb, directionToCenter, distance, 0.5f);
+            return;
+        }
 
-        //// Spin around the center
-        //Vector2 tangent = new Vector2(-directionToCenter.y, directionToCenter.x).normalized;
-        //rb.AddForce(tangent * spinStrength * Time.fixedDeltaTime);
+        // If player is slow and near center → trapped
+        if (distance <= centerLockRadius)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.position = transform.position;
+            rb.MoveRotation(rb.rotation + trappedRotationSpeed * Time.fixedDeltaTime);
+
+            return;
+        }
+
+        // Normal pull
+        ApplyPull(rb, directionToCenter, distance, 1f);
+    }
+
+    private void ApplyPull(Rigidbody2D rb, Vector2 direction, float distance, float strengthMultiplier)
+    {
+        float distanceFactor = Mathf.Clamp01(1f - (distance / maxPullDistance));
+        Vector2 force = direction.normalized * pullStrength * distanceFactor * strengthMultiplier;
+
+        rb.AddForce(force, ForceMode2D.Force);
     }
 }

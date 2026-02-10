@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Current
   - Boat
+  - TnT
   layers:
   - Default
   - TransparentFX

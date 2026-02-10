@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 9088669002869319167}
   - component: {fileID: 3097246934184613116}
   - component: {fileID: 5218379074057646641}
+  - component: {fileID: 9075192089498150800}
   m_Layer: 0
   m_Name: Boat
   m_TagString: Boat
@@ -194,8 +195,23 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5254175981728082024}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c11d69435bf77f2418b51672900d48f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+--- !u!114 &9075192089498150800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5254175981728082024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f652dcef941900f43b6c1938761d546f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoatCollision
+  deathTag: TnT
+  invulnerableTag: Invulnerable
+  invulnerableDuration: 3

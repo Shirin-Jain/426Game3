@@ -10,6 +10,8 @@ public class PlayerWhirlpoolState : MonoBehaviour
     private float maxPullDistance;
     private bool inWhirlpool = false;
 
+
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -57,4 +59,7 @@ public class PlayerWhirlpoolState : MonoBehaviour
         //}
         rb.AddForce(force, ForceMode2D.Force);
     }
+
+
+   
 }

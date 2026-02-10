@@ -8,33 +8,36 @@ public class BoatMove : MonoBehaviour
     public float horizontalDeccel;
 
     public float verticalDeccel;
-
     public float currentAccel = 15;
 
     public string currentTag = "Current";
     public bool onCurrent = false;
 
     private Rigidbody2D rb;
+    private bool isDead = false;
 
     [Header("Movement Audio")]
-    [SerializeField] private AudioSource moveAudio;     // looping movement sound
+    [SerializeField] private AudioSource moveAudio;
     [SerializeField] private float minSpeedForSound = 0.1f;
     [SerializeField] private float movePitchMin = 0.95f;
     [SerializeField] private float movePitchMax = 1.05f;
 
     [Header("Explosion Audio")]
-    [SerializeField] private AudioSource explosionAudio; // one-shot explosion sound
-    [SerializeField] private string tntTag = "TNT";
+    [SerializeField] private AudioSource explosionAudio;
     [SerializeField] private float explosionPitchMin = 0.95f;
     [SerializeField] private float explosionPitchMax = 1.05f;
+
+    [Header("Death Audio")]
+    [SerializeField] private AudioSource deathAudio;
+    [SerializeField] private float deathPitchMin = 0.95f;
+    [SerializeField] private float deathPitchMax = 1.05f;
+
+    [Header("Tags")]
+    [SerializeField] private string tntTag = "TNT";
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-
-        // If you forgot to assign, try grabbing an AudioSource from the same GameObject for moveAudio.
-        if (moveAudio == null)
-            moveAudio = GetComponent<AudioSource>();
 
         if (moveAudio != null)
         {
@@ -47,10 +50,18 @@ public class BoatMove : MonoBehaviour
             explosionAudio.loop = false;
             explosionAudio.playOnAwake = false;
         }
+
+        if (deathAudio != null)
+        {
+            deathAudio.loop = false;
+            deathAudio.playOnAwake = false;
+        }
     }
 
     void Update()
     {
+        if (isDead) return;
+
         float horizotnalVelocity = rb.linearVelocity.x;
         float verticalVelocity = rb.linearVelocity.y;
 
@@ -65,23 +76,15 @@ public class BoatMove : MonoBehaviour
 
         horizotnalVelocity = Mathf.Clamp(horizotnalVelocity, 0, maxHorizontalSpeed);
 
-        if (!onCurrent)
+        if (!onCurrent && verticalVelocity != 0)
         {
-            if (verticalVelocity != 0)
-            {
-                float verticalDirection = (verticalVelocity > 0) ? 1f : -1f;
+            float verticalDirection = verticalVelocity > 0 ? 1f : -1f;
+            verticalVelocity += -verticalDirection * verticalDeccel * Time.deltaTime;
 
-                verticalVelocity += -verticalDirection * verticalDeccel * Time.deltaTime;
-
-                if (verticalDirection == -1f)
-                {
-                    if (verticalVelocity > 0f) verticalVelocity = 0f;
-                }
-                else
-                {
-                    if (verticalVelocity < 0f) verticalVelocity = 0f;
-                }
-            }
+            if (verticalDirection == -1f && verticalVelocity > 0f)
+                verticalVelocity = 0f;
+            else if (verticalDirection == 1f && verticalVelocity < 0f)
+                verticalVelocity = 0f;
         }
 
         rb.linearVelocity = new Vector2(horizotnalVelocity, verticalVelocity);
@@ -91,7 +94,7 @@ public class BoatMove : MonoBehaviour
 
     private void UpdateMoveSound()
     {
-        if (moveAudio == null) return;
+        if (moveAudio == null || isDead) return;
 
         float speed = rb.linearVelocity.magnitude;
 
@@ -105,36 +108,44 @@ public class BoatMove : MonoBehaviour
         }
         else
         {
-            if (moveAudio.isPlaying)
-            {
-                moveAudio.Pause();
-            }
+            moveAudio.Pause();
         }
     }
 
     private void PlayExplosionSound()
     {
         if (explosionAudio == null) return;
-
         explosionAudio.pitch = Random.Range(explosionPitchMin, explosionPitchMax);
         explosionAudio.Play();
     }
 
-    // TNT collision (requires TNT Collider2D with IsTrigger OFF)
+    private void PlayDeathSound()
+    {
+        if (deathAudio == null) return;
+        deathAudio.pitch = Random.Range(deathPitchMin, deathPitchMax);
+        deathAudio.Play();
+    }
+
+    // 💥 TNT collision
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (isDead) return;
+
         if (collision.gameObject.CompareTag(tntTag))
         {
-            // Optional: stop movement loop on explosion
-            if (moveAudio != null && moveAudio.isPlaying)
+            isDead = true;
+
+            // Stop movement immediately
+            rb.linearVelocity = Vector2.zero;
+
+            if (moveAudio != null)
                 moveAudio.Stop();
 
             PlayExplosionSound();
+            PlayDeathSound();
 
-            // Optional: destroy TNT after hit
-            // Destroy(collision.gameObject);
-
-            // Optional: call game over here if you want
+            // Optional extras:
+            // Destroy(collision.gameObject); // remove TNT
             // LevelManager.instance.GameOver();
         }
     }
@@ -142,14 +153,12 @@ public class BoatMove : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag(currentTag))
-        {
             onCurrent = true;
-        }
     }
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (!other.CompareTag(currentTag))
+        if (!other.CompareTag(currentTag) || isDead)
             return;
 
         float radians = other.transform.rotation.z;
@@ -159,14 +168,12 @@ public class BoatMove : MonoBehaviour
             Mathf.Sin(radians)
         );
 
-        rb.linearVelocity = rb.linearVelocity + (direction * currentAccel * Time.fixedDeltaTime);
+        rb.linearVelocity += direction * currentAccel * Time.fixedDeltaTime;
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag(currentTag))
-        {
             onCurrent = false;
-        }
     }
 }

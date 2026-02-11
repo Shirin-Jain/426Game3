@@ -7,7 +7,7 @@ public class BoatCollision : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
-    [SerializeField] private string deathTag = "TnT";
+    [SerializeField] private string explosionTag = "TnT";
 
     [SerializeField] private string invulnerableTag = "Invulnerable";
     [SerializeField] private float invulnerableDuration = 3f;
@@ -27,6 +27,8 @@ public class BoatCollision : MonoBehaviour
     public GameObject deathScreen;
 
     public bool actuallyDie = false;
+
+    public BoatAudio audioManager;
 
 
     void Start()
@@ -53,8 +55,9 @@ public class BoatCollision : MonoBehaviour
             StartCoroutine(InvulnerabilityCoroutine());
             Destroy(other.gameObject); 
         }
-        else if (other.CompareTag(deathTag))
+        else if (other.CompareTag(explosionTag))
         {
+            audioManager.PlayExplosionSound();
             TryDie();
         }
     }
@@ -63,8 +66,9 @@ public class BoatCollision : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //disable collisions
-        if (collision.gameObject.CompareTag(deathTag))
+        if (collision.gameObject.CompareTag(explosionTag))
         {
+            audioManager.PlayExplosionSound();
             TryDie();
         }
     }
@@ -84,8 +88,7 @@ public class BoatCollision : MonoBehaviour
         {
             Destroy(gameObject);
             deathScreen.SetActive(true);
-
-            // game over screen
+            audioManager.PlayDeathSound();
 
         }
         else

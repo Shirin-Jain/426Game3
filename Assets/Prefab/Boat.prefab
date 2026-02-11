@@ -15,11 +15,10 @@ GameObject:
   - component: {fileID: 3097246934184613116}
   - component: {fileID: 5218379074057646641}
   - component: {fileID: 9075192089498150800}
-  - component: {fileID: 40094100317468194}
-  - component: {fileID: 1501334729176444845}
   - component: {fileID: 2806702214380796369}
   - component: {fileID: 2659525054863506757}
   - component: {fileID: 7740406219390740607}
+  - component: {fileID: 7487803083647097769}
   m_Layer: 0
   m_Name: Boat
   m_TagString: Boat
@@ -193,17 +192,6 @@ MonoBehaviour:
   currentAccel: 10
   currentTag: Current
   onCurrent: 0
-  moveAudio: {fileID: 2806702214380796369}
-  minSpeedForSound: 0.1
-  movePitchMin: 0.95
-  movePitchMax: 1.05
-  explosionAudio: {fileID: 2659525054863506757}
-  explosionPitchMin: 0.95
-  explosionPitchMax: 1.05
-  deathAudio: {fileID: 7740406219390740607}
-  deathPitchMin: 0.95
-  deathPitchMax: 1.05
-  tntTag: TnT
 --- !u!114 &5218379074057646641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,44 +216,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f652dcef941900f43b6c1938761d546f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoatCollision
-  deathTag: TnT
+  explosionTag: TnT
   invulnerableTag: Invulnerable
   invulnerableDuration: 3
   flashTimeRemaining: 0.5
   flashInterval: 0.05
   invulnerableColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  deathScreen: {fileID: 2025373614999363197, guid: 226cbfccb5f4fd1499b19378f5afa7f2, type: 3}
   actuallyDie: 0
---- !u!114 &40094100317468194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5254175981728082024}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67eabfc59005ecb458e04ceb924608bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerWhirlpoolState
---- !u!114 &1501334729176444845
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5254175981728082024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f652dcef941900f43b6c1938761d546f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BoatCollision
-  deathTag: TnT
-  invulnerableTag: Invulnerable
-  invulnerableDuration: 3
-  flashTimeRemaining: 0.5
-  flashInterval: 0.05
-  invulnerableColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  actuallyDie: 0
+  audioManager: {fileID: 7487803083647097769}
 --- !u!82 &2806702214380796369
 AudioSource:
   m_ObjectHideFlags: 0
@@ -557,3 +516,25 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7487803083647097769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5254175981728082024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ba2f07d01358545b4f481d3edeb00b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoatAudio
+  moveAudio: {fileID: 2806702214380796369}
+  minSpeedForSound: 0.1
+  movePitchMin: 0.95
+  movePitchMax: 1.05
+  explosionAudio: {fileID: 2659525054863506757}
+  explosionPitchMin: 0.95
+  explosionPitchMax: 1.05
+  deathAudio: {fileID: 7740406219390740607}
+  deathPitchMin: 0.95
+  deathPitchMax: 1.05

@@ -15,47 +15,10 @@ public class BoatMove : MonoBehaviour
 
     private Rigidbody2D rb;
     private bool isDead = false;
-
-    [Header("Movement Audio")]
-    [SerializeField] private AudioSource moveAudio;
-    [SerializeField] private float minSpeedForSound = 0.1f;
-    [SerializeField] private float movePitchMin = 0.95f;
-    [SerializeField] private float movePitchMax = 1.05f;
-
-    [Header("Explosion Audio")]
-    [SerializeField] private AudioSource explosionAudio;
-    [SerializeField] private float explosionPitchMin = 0.95f;
-    [SerializeField] private float explosionPitchMax = 1.05f;
-
-    [Header("Death Audio")]
-    [SerializeField] private AudioSource deathAudio;
-    [SerializeField] private float deathPitchMin = 0.95f;
-    [SerializeField] private float deathPitchMax = 1.05f;
-
-    [Header("Tags")]
-    [SerializeField] private string tntTag = "TNT";
-
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-
-        if (moveAudio != null)
-        {
-            moveAudio.loop = true;
-            moveAudio.playOnAwake = false;
-        }
-
-        if (explosionAudio != null)
-        {
-            explosionAudio.loop = false;
-            explosionAudio.playOnAwake = false;
-        }
-
-        if (deathAudio != null)
-        {
-            deathAudio.loop = false;
-            deathAudio.playOnAwake = false;
-        }
+      
     }
 
     void Update()
@@ -89,66 +52,9 @@ public class BoatMove : MonoBehaviour
 
         rb.linearVelocity = new Vector2(horizotnalVelocity, verticalVelocity);
 
-        UpdateMoveSound();
     }
 
-    private void UpdateMoveSound()
-    {
-        if (moveAudio == null || isDead) return;
-
-        float speed = rb.linearVelocity.magnitude;
-
-        if (speed > minSpeedForSound)
-        {
-            if (!moveAudio.isPlaying)
-            {
-                moveAudio.pitch = Random.Range(movePitchMin, movePitchMax);
-                moveAudio.Play();
-            }
-        }
-        else
-        {
-            moveAudio.Pause();
-        }
-    }
-
-    private void PlayExplosionSound()
-    {
-        if (explosionAudio == null) return;
-        explosionAudio.pitch = Random.Range(explosionPitchMin, explosionPitchMax);
-        explosionAudio.Play();
-    }
-
-    private void PlayDeathSound()
-    {
-        if (deathAudio == null) return;
-        deathAudio.pitch = Random.Range(deathPitchMin, deathPitchMax);
-        deathAudio.Play();
-    }
-
-    // 💥 TNT collision
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (isDead) return;
-
-        if (collision.gameObject.CompareTag(tntTag))
-        {
-            isDead = true;
-
-            // Stop movement immediately
-            rb.linearVelocity = Vector2.zero;
-
-            if (moveAudio != null)
-                moveAudio.Stop();
-
-            PlayExplosionSound();
-            PlayDeathSound();
-
-            // Optional extras:
-            // Destroy(collision.gameObject); // remove TNT
-            // LevelManager.instance.GameOver();
-        }
-    }
+   
 
     private void OnTriggerEnter2D(Collider2D other)
     {

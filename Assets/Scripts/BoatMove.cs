@@ -6,6 +6,7 @@ public class BoatMove : MonoBehaviour
     public float maxHorizontalSpeed;
     public float horizontalAccel;
     public float horizontalDeccel;
+    public float bounceDeccel;
 
     public float verticalDeccel;
     public float currentAccel = 15;
@@ -13,11 +14,13 @@ public class BoatMove : MonoBehaviour
     public string currentTag = "Current";
     public bool onCurrent = false;
 
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private bool isDead = false;
+
+    public bool isBouncing = false;
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        //rb = GetComponent<Rigidbody2D>();
       
     }
 
@@ -28,16 +31,39 @@ public class BoatMove : MonoBehaviour
         float horizotnalVelocity = rb.linearVelocity.x;
         float verticalVelocity = rb.linearVelocity.y;
 
-        if (Keyboard.current.spaceKey.isPressed)
+        if (!isBouncing)
         {
-            horizotnalVelocity += horizontalAccel * Time.deltaTime;
+            if (Keyboard.current.spaceKey.isPressed)
+            {
+                horizotnalVelocity += horizontalAccel * Time.deltaTime;
+            }
+            else
+            {
+                horizotnalVelocity -= horizontalDeccel * Time.deltaTime;
+            }
+
+            horizotnalVelocity = Mathf.Clamp(horizotnalVelocity, 0, maxHorizontalSpeed);
         }
         else
         {
-            horizotnalVelocity -= horizontalDeccel * Time.deltaTime;
+            if (Keyboard.current.spaceKey.isPressed)
+            {
+                horizotnalVelocity += horizontalAccel * Time.deltaTime;
+            }
+            else
+            {
+                horizotnalVelocity += bounceDeccel * Time.deltaTime;
+
+            }
+
+            if (horizotnalVelocity >= 0)
+            {
+                isBouncing = false;
+            }
+
         }
 
-        horizotnalVelocity = Mathf.Clamp(horizotnalVelocity, 0, maxHorizontalSpeed);
+
 
         if (!onCurrent && verticalVelocity != 0)
         {
@@ -81,5 +107,13 @@ public class BoatMove : MonoBehaviour
     {
         if (other.CompareTag(currentTag))
             onCurrent = false;
+    }
+
+    public void Bounce(float impact, Vector2 impactSpeed)
+    {
+        
+        Debug.Log("Vector: " + impactSpeed.x + ", " + impactSpeed.y);
+        rb.linearVelocity = new Vector2 (-impactSpeed.x, impactSpeed.y);
+        isBouncing = true;
     }
 }

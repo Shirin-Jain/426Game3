@@ -8,6 +8,7 @@ TagManager:
   - Boat
   - TnT
   - Invulnerable
+  - Crate
   layers:
   - Default
   - TransparentFX

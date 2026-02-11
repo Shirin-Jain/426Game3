@@ -20,6 +20,16 @@ public class BoatAudio : MonoBehaviour
     [SerializeField] private float deathPitchMax = 1.05f;
 
 
+    [Header("Audio SFX")]
+    [SerializeField] private AudioSource crateBreakAudio;
+    [SerializeField] private AudioSource crashAudio;
+    [SerializeField] private AudioSource powerUpAudio;
+
+
+
+
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     private Rigidbody2D rb;
@@ -49,6 +59,24 @@ public class BoatAudio : MonoBehaviour
             deathAudio.playOnAwake = false;
         }
 
+        if(crateBreakAudio != null)
+        {
+            crateBreakAudio.loop = false;
+            crateBreakAudio.playOnAwake = false;
+        }
+
+        if (crashAudio != null)
+        {
+            crashAudio.loop = false;
+            crashAudio.playOnAwake = false;
+        }
+
+        if (powerUpAudio != null)
+        {
+            powerUpAudio.loop = false;
+            powerUpAudio.playOnAwake = false;
+        }
+
     }
 
 
@@ -74,6 +102,37 @@ public class BoatAudio : MonoBehaviour
 
             }
         }
+    }
+
+
+    public void PlayCrateBreakSound()
+    {
+        if (crateBreakAudio == null) return;
+        crateBreakAudio.Play();
+
+        Debug.Log("Crate break");
+
+
+    }
+
+    public void PlayCrashSound(float volume)
+    {
+        Debug.Log("Crash");
+
+        if (crashAudio == null) return;
+        crashAudio.volume = volume;
+        crashAudio.Play();
+
+
+    }
+
+    public void PlayPowerUpSound()
+    {
+        if (powerUpAudio == null) return;
+        powerUpAudio.Play();
+
+        Debug.Log("Power up");
+
     }
 
     public void PlayExplosionSound()

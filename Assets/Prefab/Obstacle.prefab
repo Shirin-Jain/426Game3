@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5829434220497433926}
   m_Layer: 0
   m_Name: Obstacle
-  m_TagString: Untagged
+  m_TagString: Crate
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -151,6 +151,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94926989e57d21d42bb087a5013f27cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObstacle
-  requiredImpactSpeed: 5
+  requiredImpactSpeed: 30
   breakEffect: {fileID: 0}
+  minImpactSpeed: 1
+  maxImpactSpeed: 20
+  minVolume: 0.1
+  maxVolume: 1
   playerTag: Boat
+  bounceForce: 8
+  audioManager: {fileID: 7487803083647097769, guid: 7867c54224850814f96f46f1afce842f, type: 3}
+  boat: {fileID: 3097246934184613116, guid: 7867c54224850814f96f46f1afce842f, type: 3}

@@ -97,7 +97,13 @@ public class BoatCollision : MonoBehaviour
 
             audioManager.PlayDeathSound();
 
-            Destroy(gameObject);
+            spriteRenderer.enabled = false;
+
+            //// Stop physics movement
+            //rb.velocity = Vector2.zero;
+            //rb.simulated = false;
+
+            //Destroy(gameObject);
 
             //move panel
         }

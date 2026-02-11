@@ -24,6 +24,11 @@ public class BreakableObstacle : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // Check if the player hit it
+
+        if (collision == null)
+        {
+            return;
+        }
         if (!collision.gameObject.CompareTag(playerTag))
             return;
 
@@ -68,7 +73,9 @@ public class BreakableObstacle : MonoBehaviour
             Instantiate(breakEffect, transform.position, Quaternion.identity);
         }
 
+        gameObject.SetActive(false);
+
         
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 }

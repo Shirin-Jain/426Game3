@@ -195,6 +195,7 @@ MonoBehaviour:
   currentTag: Current
   onCurrent: 0
   rb: {fileID: 1818000675584100799}
+  isBouncing: 0
 --- !u!114 &9075192089498150800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,7 +215,7 @@ MonoBehaviour:
   flashTimeRemaining: 0.5
   flashInterval: 0.05
   invulnerableColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  deathScreen: {fileID: 2025373614999363197, guid: 226cbfccb5f4fd1499b19378f5afa7f2, type: 3}
+  deathScreen: {fileID: 4954233560885253560, guid: 226cbfccb5f4fd1499b19378f5afa7f2, type: 3}
   actuallyDie: 0
   audioManager: {fileID: 7487803083647097769}
 --- !u!82 &2806702214380796369

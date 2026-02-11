@@ -26,7 +26,8 @@ public class BoatCollision : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
 
-    public GameObject deathScreen;
+    public RectTransform deathScreen;
+
 
     public bool actuallyDie = false;
 
@@ -38,7 +39,7 @@ public class BoatCollision : MonoBehaviour
         playerCollider = GetComponent<Collider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         originalColor = spriteRenderer.color;
-        deathScreen.SetActive(false);
+        deathScreen.gameObject.SetActive(false);
 
 
     }
@@ -89,10 +90,15 @@ public class BoatCollision : MonoBehaviour
 
         if (actuallyDie)
         {
-            Destroy(gameObject);
-            deathScreen.SetActive(true);
+            Debug.Log("Actually die");
+
+            deathScreen.gameObject.SetActive(true);
+            deathScreen.anchoredPosition = Vector2.zero;
 
             audioManager.PlayDeathSound();
+
+            Destroy(gameObject);
+
             //move panel
         }
         else

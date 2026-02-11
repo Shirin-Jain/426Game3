@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 8.04, y: -0.06, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -143,20 +143,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Whirlpool
   pullStrength: 50
   maxPullDistance: 5
-  escapeForce: 30
-  escapeSpeedThreshold: 15
+  escapeForce: 25
+  escapeSpeedThreshold: 20
   centerLockRadius: 0.5
   playerTag: Boat
   trappedRotationSpeed: 360
-  mashGainPerPress: 0.4
-  mashDecayPerSecond: 0.2
+  mashGainPerPress: 0.2
+  mashDecayPerSecond: 0.4
   mashRequired: 1
   maxTrappedTime: 3
   shrinkSpeed: 1.5
   minScaleWhileAlive: 0.15
   deathScale: 0.01
   scaleRestoreSpeed: 4
-  playerDie: {fileID: 0}
+  playerDie: {fileID: 9075192089498150800, guid: 7867c54224850814f96f46f1afce842f, type: 3}
   mashProgress: 0
   escape: 0
   startDirection: {x: 0, y: 0}

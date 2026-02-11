@@ -23,7 +23,7 @@ public class BoatCollision : MonoBehaviour
     [Header("Visuals")]
     [SerializeField] private Color invulnerableColor = Color.yellow;
 
-    private SpriteRenderer spriteRenderer;
+    public SpriteRenderer spriteRenderer;
     private Color originalColor;
 
     public RectTransform deathScreen;
